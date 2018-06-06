@@ -1,0 +1,124 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    color: #7f8c8d;
+    font-size: 18px;
+    font-family: 'Lato', sans-serif;    
+    text-rendering: optimizeLegibility;  
+}
+
+.app-container {
+    width: 1140px;
+    margin: 2% auto 0 auto;
+    font-size: 100%;
+}
+
+h1 {
+    font-weight: 300;
+    font-size: 150%;
+    letter-spacing: 1px;
+}
+
+h1:first-of-type {
+    margin-top: 20px;
+}
+
+h1:last-of-type {
+    margin-bottom: 20px;
+}
+
+
+
+/* ---------------------------------------- */
+/* MAIN BOX */
+/* ---------------------------------------- */
+
+.main-box {
+    width: 70%;
+    float: left;
+    text-align: center;
+    border-right: 1px solid #d4d4d4;
+}
+
+.cards img {
+    width: 15%;
+    padding: 1%;
+}
+
+.separator {
+    margin: 10px auto;
+    width: 50px;
+    border-bottom: 1px solid;
+}
+
+
+
+/* ---------------------------------------- */
+/* SIDE BOX */
+/* ---------------------------------------- */
+.side-box {
+    width: 30%;   
+    float: left;
+    padding-left: 20px;
+}
+
+.btn {
+    padding-bottom: 5px;
+    display: inline-block;
+    color: #7f8c8d;
+    font-size: 100%;
+    font-weight: 300;
+    text-decoration: none;
+    margin: 1% 0;
+}
+
+.btn:link,
+.btn:visited {
+    border-bottom: 1px solid transparent;
+    transition: border-bottom 0.2s;
+}
+
+.btn:hover,
+.btn:active {
+    border-bottom: 1px solid;
+}
+
+.log-title {
+    margin-top: 30px;
+}
+
+.log {
+    margin-top: 10px;
+    width: 90%;
+}
+
+.log p {
+    font-size: 90%;
+}
+
+.win {
+    color: #27ae60;
+}
+
+.lose {
+    color: #e74c3c;
+}
+
+.tie {
+    color: #2980b9;
+}
+
+.win,
+.lose,
+.tie {
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.action-message {
+    font-style: italic; 
+    margin: 5px 0;
+}
