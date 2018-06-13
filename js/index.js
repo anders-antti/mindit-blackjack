@@ -2,15 +2,17 @@
  * DATA MODEL CONTROLLER
  */
 const dataController = (() => {
-    const gameState = {
-        dealer: {
-            cards: [],
-            score: 0
-        },
-        player: {
-            cards: [],
-            score: 0
+
+    class Player {
+        constructor() {
+            this.cards = [];
+            this.score = 0;
         }
+    }
+
+    const gameState = {
+        dealer: new Player(),
+        player: new Player()
     };
 
     const isDuplicate = (card) => gameState.dealer.cards.includes(card) || gameState.player.cards.includes(card);
@@ -81,7 +83,9 @@ const dataController = (() => {
             gameState.dealer.cards = [];
             gameState.player.cards = [];
             gameState.dealer.score = gameState.player.score = 0;
-        }
+        },
+
+        test: () => gameState
     };
 })();
 
@@ -89,7 +93,7 @@ const dataController = (() => {
 /**
  * VIEW
  */
-const UIController = (() => {   
+const UIController = (() => {
 
     const DOM = {
         dealer: document.querySelector('.dealer'),
@@ -98,7 +102,7 @@ const UIController = (() => {
         hitBtn: document.querySelector('.hit'),
         standBtn: document.querySelector('.stand'),
         newGame: document.querySelector('.new'),
-        cardsBox: document.querySelectorAll('.cards')        
+        cardsBox: document.querySelectorAll('.cards')
     };
 
     return {
@@ -227,7 +231,7 @@ const Controller = ((dataCtrl, UICtrl) => {
         elem.standBtn.addEventListener('click', standBtnAction);
 
         // Setup NEW GAME button
-        elem.newGame.addEventListener('click', Controller.init);        
+        elem.newGame.addEventListener('click', Controller.init);
     };
 
 
