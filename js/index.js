@@ -5,8 +5,50 @@ const dataController = (() => {
 
     class Player {
         constructor() {
+            this.clean();
+        }
+
+        score() {
+            let score = this.scoreList.reduce((s, e) => s + e, 0);
+            let numberOfAces = this.cards.reduce((count, e) => count += e.includes('A') ? 1 : 0, 0);
+
+            while (score > 21 && numberOfAces) {
+                score -= 10;
+                numberOfAces--;
+            }
+
+            return score;
+        }
+
+        newCard() {
+            const highFace = { '11': 'A', '12': 'J', '13': 'Q', '14': 'K' };
+            const symbol = { '0': 'H', '1': 'D', '2': 'C', '3': 'S' };
+            let randomFace, randomSymbol, newCard;
+
+            const assignCard = () => {
+                randomFace = Math.floor(Math.random() * 13 + 2);
+                randomSymbol = Math.floor(Math.random() * 4);
+                return {
+                    card: `${randomFace > 10 ? highFace[randomFace] : randomFace}${symbol[randomSymbol]}`,
+                    points: randomFace > 11 ? 10 : (randomFace === 11 ? 11 : randomFace)
+                }
+            };
+
+            newCard = assignCard();
+
+            while (this.cards.includes(newCard.card)) {
+                newCard = assignCard();
+            }
+
+            this.cards.push(newCard.card);
+            this.scoreList.push(newCard.points);
+
+            return newCard;
+        }
+
+        clean() {
             this.cards = [];
-            this.score = 0;
+            this.scoreList = [];
         }
     }
 
@@ -15,60 +57,23 @@ const dataController = (() => {
         player: new Player()
     };
 
-    const isDuplicate = (card) => gameState.dealer.cards.includes(card) || gameState.player.cards.includes(card);
-
-    const randomCard = () => {
-        const highFace = { '11': 'A', '12': 'J', '13': 'Q', '14': 'K' };
-        const symbol = { '0': 'H', '1': 'D', '2': 'C', '3': 'S' };
-        let randomFace, randomSymbol, newCard;
-
-        const assignCard = () => {
-            randomFace = Math.floor(Math.random() * 13 + 2);
-            randomSymbol = Math.floor(Math.random() * 4);
-            return {
-                card: `${randomFace > 10 ? highFace[randomFace] : randomFace}${symbol[randomSymbol]}`,
-                points: randomFace > 11 ? 10 : (randomFace === 11 ? 11 : randomFace)
-            }
-        };
-
-        newCard = assignCard();
-
-        while (isDuplicate(newCard.card)) {
-            newCard = assignCard();
-        }
-
-        return newCard;
-    };
-
     return {
-        newCard: (turn) => {
-            const newCard = randomCard();
-            gameState[turn].cards.push(newCard.card);
-            gameState[turn].score += newCard.points;
+        newCard: (turn) => gameState[turn].newCard(),
 
-            // Adjust for Ace
-            if (gameState[turn].score > 21 && gameState[turn].cards.join('').includes('A')) {
-                gameState[turn].score -= 10;
-            }
-
-            return newCard;
-        },
-
-        getScore: (turn) => {
-            return gameState[turn].score;
-        },
+        getScore: (turn) => gameState[turn].score(),
 
         checkGame: () => {
+            const playerScore = gameState.player.score(), dealerScore = gameState.dealer.score();
 
             // player busts
-            if (gameState.player.score > 21) return 'dealer';
+            if (playerScore > 21) return 'dealer';
 
-            // if it's dealer's turn
+            // dealer's turn
             if (gameState.dealer.cards.length > 1) {
-                if (gameState.dealer.score === gameState.player.score) {
+                if (dealerScore === playerScore) {
                     return 'tie';
                 }
-                if (gameState.player.score > gameState.dealer.score || gameState.dealer.score > 21) {
+                if (playerScore > dealerScore || dealerScore > 21) {
                     return 'player';
                 }
 
@@ -80,9 +85,8 @@ const dataController = (() => {
         },
 
         clean: () => {
-            gameState.dealer.cards = [];
-            gameState.player.cards = [];
-            gameState.dealer.score = gameState.player.score = 0;
+            gameState.dealer.clean();
+            gameState.player.clean();
         },
 
         test: () => gameState
