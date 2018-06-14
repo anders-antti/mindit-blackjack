@@ -36,7 +36,7 @@ const dataController = (() => {
 
             newCard = assignCard();
 
-            while (this.cards.includes(newCard.card)) {
+            while (gameState.player.cards.includes(newCard.card) || gameState.dealer.cards.includes(newCard.card)) {
                 newCard = assignCard();
             }
 
